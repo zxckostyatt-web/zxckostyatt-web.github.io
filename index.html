@@ -19,11 +19,8 @@
             justify-content: flex-start;
             padding: 40px 20px 60px;
             text-align: center;
-            overflow-x: hidden;
             position: relative;
         }
-
-        /* Точный фон с отражением как на фото */
         body::before {
             content: '';
             position: absolute;
@@ -33,19 +30,16 @@
             pointer-events: none;
         }
 
-        /* Логотип MAX с твоей иконкой */
+        /* Логотип MAX */
         .logo {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 20px;
             margin: 30px 0 50px;
-            width: 100%;
-            max-width: 400px;
         }
         .logo img {
             width: 110px;
-            height: auto;
             filter: drop-shadow(0 10px 30px rgba(138,43,226,0.6));
             animation: float 6s ease-in-out infinite;
         }
@@ -56,13 +50,11 @@
             background: linear-gradient(90deg, #ffffff, #c0c0ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 4px 20px rgba(138,43,226,0.5);
         }
         @media (min-width: 500px) {
             .logo span { font-size: 48px; }
             .logo img { width: 130px; }
         }
-
         @keyframes float {
             0%,100% { transform: translateY(0) rotate(-2deg); }
             50% { transform: translateY(-20px) rotate(2deg); }
@@ -78,32 +70,35 @@
         }
         @media (min-width: 500px) { .text { font-size: 28px; } }
 
+        /* КНОПКА 2 см × 12 см */
         .call-btn {
-            width: 82vw;
-            max-width: 340px;
-            padding: 38px 20px;
-            font-size: 7.5vw;
+            width: 80px;        /* ≈ 2 см на большинстве телефонов */
+            height: 380px;      /* ≈ 12 см */
+            padding: 20px 10px;
+            font-size: 24px;
             font-weight: 900;
             color: white;
-            background: rgba(138, 43, 226, 0.2);
-            border: 3px solid #a855f7;
+            background: rgba(138, 43, 226, 0.25);
+            border: 4px solid #a855f7;
             border-radius: 50px;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 8px;
             box-shadow: 
-                0 0 40px #a855f7,
-                0 0 80px rgba(168,85,247,0.6),
-                inset 0 0 30px rgba(168,85,247,0.3);
+                0 0 50px #a855f7,
+                0 0 100px rgba(168,85,247,0.7),
+                inset 0 0 40px rgba(168,85,247,0.4);
             cursor: pointer;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
             transition: all 0.3s;
-        }
-        @media (min-width: 500px) {
-            .call-btn { font-size: 36px; padding: 42px 20px; }
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .call-btn:active {
-            transform: scale(0.94);
-            box-shadow: 0 0 100px #c084fc;
+            transform: scale(0.93);
+            box-shadow: 0 0 120px #c084fc;
         }
 
         .ripple {
@@ -111,17 +106,16 @@
             border-radius: 50%;
             background: rgba(168,85,247,0.6);
             transform: scale(0);
-            animation: ripple 0.9s linear;
+            animation: ripple 1s linear;
             pointer-events: none;
         }
-        @keyframes ripple { to { transform: scale(4); opacity: 0; } }
+        @keyframes ripple { to { transform: scale(5); opacity: 0; } }
     </style>
 </head>
 <body>
 
-    <!-- Логотип MAX (твоя иконка + надпись) -->
     <div class="logo">
-        <img src="https://s3.iimg.su/s/19/gIVLamkxTAEzoeqNCvAdQNUj2zEgaaKvBvQ70GVz.jpg" alt="Max Icon">
+        <img src="https://s3.iimg.su/s/19/gIVLamkxTAEzoeqNCvAdQNUj2zEgaaKvBvQ70GVz.jpg" alt="Max">
         <span>MAX</span>
     </div>
 
@@ -141,11 +135,11 @@
         const audio = document.getElementById('ring');
 
         btn.addEventListener('click', function(e) {
-            if (navigator.vibrate) navigator.vibrate([200,100,200,100,300]);
+            if (navigator.vibrate) navigator.vibrate([250,100,250,100,400]);
 
             const ripple = document.createElement('span');
             const rect = btn.getBoundingClientRect();
-            const size = rect.width * 1.6;
+            const size = Math.max(rect.width, rect.height) * 2;
             const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left - size/2;
             const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top - size/2;
 
@@ -154,13 +148,12 @@
             ripple.style.left = x + 'px';
             ripple.style.top = y + 'px';
             btn.appendChild(ripple);
-            setTimeout(() => ripple.remove(), 900);
+            setTimeout(() => ripple.remove(), 1000);
 
             audio.currentTime = 0;
             audio.play();
         });
 
-        // Разблокировка звука на мобильных
         document.body.addEventListener('touchstart', () => {
             audio.play().then(() => audio.pause());
         }, {once: true});
