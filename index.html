@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Позвонить по Макс</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* Неоновый уголок */
+        .neon-corner {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle at 100% 0%, #00f2ff, transparent 70%);
+            filter: blur(20px);
+            opacity: 0.8;
+            animation: pulse 4s infinite;
+        }
+
+        .neon-corner::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 100px;
+            height: 100px;
+            background: #00f2ff;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.6;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* Иконка Messenger */
+        .messenger-icon {
+            position: absolute;
+            top: 40px;
+            right: 50px;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 30px #00f2ff, 0 0 60px #00f2ff;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .messenger-icon svg {
+            width: 50px;
+            height: 50px;
+            fill: white;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Кнопка */
+        .call-button {
+            position: relative;
+            padding: 25px 80px;
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+            background: rgba(0, 242, 255, 0.1);
+            border: 3px solid #00f2ff;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 
+                0 0 20px #00f2ff,
+                0 0 40px #00f2ff,
+                inset 0 0 20px rgba(0, 242, 255, 0.3);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            z-index: 10;
+        }
+
+        .call-button:hover {
+            transform: scale(1.05);
+            box-shadow: 
+                0 0 40px #00f2ff,
+                0 0 80px #00f2ff,
+                inset 0 0 40px rgba(0, 242, 255, 0.5);
+            background: rgba(0, 242, 255, 0.2);
+        }
+
+        .call-button:active {
+            transform: scale(0.98);
+        }
+
+        /* Волны при нажатии */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(0, 242, 255, 0.4);
+            transform: scale(0);
+            animation: ripple-animation 0.8s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple-animation {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Неоновый уголок -->
+    <div class="neon-corner"></div>
+
+    <!-- Иконка Messenger -->
+    <div class="messenger-icon">
+        <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.5 2 2 6.1 2 11.3c0 3.1 1.5 5.8 3.8 7.6v3.4l3.5-1.9c.9.3 1.9.4 2.7.4 5.5 0 10-4.1 10-9.3S17.5 2 12 2zM13.6 14.6l-2.8-3-3.7 3L13.6 8l2.9 3 3.6-3-6.5 6.6z"/>
+        </svg>
+    </div>
+
+    <!-- Кнопка звонка -->
+    <button class="call-button" id="callBtn">
+        Позвонить по Макс
+    </button>
+
+    <!-- Звук звонка Messenger (встроенный base64) -->
+    <audio id="ringtone" preload="auto">
+        <source src="data:audio/mp3;base64,/+MYxAAAAANIAAAAAExNTUwAAAAA/+MYxAANlcQAADYAAADkAAB/8AAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgAANgA 2.5s infinite linear;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Неоновый уголок -->
+    <div class="neon-corner"></div>
+
+    <!-- Иконка Messenger -->
+    <div class="messenger-icon">
+        <svg viewBox="0 0 800 800">
+            <path fill="#00f2ea" d="M400 32C178.8 32 0 181.4 0 368c0 103.7 45.5 195.6 116.3 258.8 7.5 6.7 12.1 16.1 12.1 26.5 0 3-1.1 5.9-2.9 8.6l-31.3 93.9c-3.9 11.7 6.9 22.5 18.6 18.6l93.9-31.3c2.7-0.9 5.6-1.4 8.6-1.4 10.4 0 20.1 4.6 26.8 12.1C309.4 786.5 352.3 800 400 800c221.2 0 400-149.4 400-332S621.2 32 400 32z"/>
+            <path fill="white" d="M159.5 546.5l105.7-167.9c12.3-19.6 38.6-26.4 59.8-15.1l84.3 42.1c14.1 7 30.6 1.6 39.7-12.5l142.8-227.8c12.3-19.6 38.6-26.4 59.8-15.1L159.5 546.5z"/>
+            <path fill="white" d="M319.2 451.4l-84.3-42.1c-21.2-10.6-47.5-3.8-59.8 15.1L69.4 592.3c-12.3 19.6-38.6 26.4-59.8 15.1l190.5-302.3 119.1 189.3z"/>
+        </svg>
+    </div>
+
+    <!-- Кнопка звонка -->
+    <button class="call-button" id="callBtn">Позвонить по Макс</button>
+
+    <!-- Звук звонка (классический звонок Messenger) -->
+    <audio id="ringtone" preload="auto">
+        <!-- Короткий оригинальный звонок Messenger в base64 (2 секунды) -->
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQg
+        ... (здесь очень длинная строка, я сократил для примера) ..." type="audio/wav">
+    </audio>
+
+    <script>
+        const btn = document.getElementById('callBtn');
+        const audio = document.getElementById('ringtone');
+
+        btn.addEventListener('click', function(e) {
+            // Эффект ripple
+            const ripple = document.createElement('span');
+            const rect = btn.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+
+            ripple.classList.add('ripple');
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            btn.appendChild(ripple);
+
+            setTimeout(() => ripple.remove(), 800);
+
+            // Воспроизведение звука
+            audio.currentTime = 0;
+            audio.play().catch(err => console.log("Звук не воспроизвёлся (браузер блокирует автоплей до взаимодействия)"));
+        });
+    </script>
+</body>
+</html>
