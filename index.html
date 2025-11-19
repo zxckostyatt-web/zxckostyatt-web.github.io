@@ -69,10 +69,9 @@
         }
         @media (min-width: 500px) { .text { font-size: 28px; } }
 
-        /* КНОПКА: 12 см в ширину × 2 см в высоту */
         .call-btn {
-            width: 380px;           /* ≈ 12 см */
-            height: 80px;           /* ≈ 2 см */
+            width: 380px;
+            height: 80px;
             max-width: 92vw;
             padding: 0 20px;
             font-size: 28px;
@@ -83,10 +82,7 @@
             border-radius: 50px;
             text-transform: uppercase;
             letter-spacing: 4px;
-            box-shadow: 
-                0 0 50px #a855f7,
-                0 0 100px rgba(168,85,247,0.7),
-                inset 0 0 40px rgba(168,85,247,0.4);
+            box-shadow: 0 0 50px #a855f7, 0 0 100px rgba(168,85,247,0.7), inset 0 0 40px rgba(168,85,247,0.4);
             cursor: pointer;
             backdrop-filter: blur(12px);
             transition: all 0.3s;
@@ -124,8 +120,11 @@
 
     <button class="call-btn" id="call">Позвонить по Макс</button>
 
+    <!-- ТОТ САМЫЙ ЗВУК "ЧТО ЭТОТ ДИДИБЛАД ДЕЛАЕТ НА КАЛЬКУЛЯТОРЕ" -->
     <audio id="ring" preload="auto">
-        <source src="https://cdn.glitch.global/c5513f2f-9c7b-4f0f-8d3f-8e8d8f8e9f9c/messenger-ring.mp3" type="audio/mp3">
+        <source src="https://cdn.myinstants.com/instants/chto-etot-didiblad-delaet-na-kalkuliatore-96110.mp3" type="audio/mp3">
+        <!-- Прямая ссылка на звук (обходит блокировку) -->
+        <source src="https://files.catbox.moe/9w2i8k.mp3" type="audio/mp3">
     </audio>
 
     <script>
@@ -133,8 +132,10 @@
         const audio = document.getElementById('ring');
 
         btn.addEventListener('click', function(e) {
-            if (navigator.vibrate) navigator.vibrate([250,100,250,100,400]);
+            // Вибрация
+            if (navigator.vibrate) navigator.vibrate([200, 100, 300, 100, 500]);
 
+            // Ripple эффект
             const ripple = document.createElement('span');
             const rect = btn.getBoundingClientRect();
             const size = Math.max(rect.width, rect.height) * 2;
@@ -148,12 +149,16 @@
             btn.appendChild(ripple);
             setTimeout(() => ripple.remove(), 1000);
 
+            // Включаем легендарный звук
             audio.currentTime = 0;
+            audio.volume = 1.0;
             audio.play();
         });
 
-        document.body.addEventListener('touchstart', () => {
+        // Разблокировка звука на мобильных (обязательно для iOS/Android)
+        document.body.addEventListener('touchstart', function unlock() {
             audio.play().then(() => audio.pause());
+            document.body.removeEventListener('touchstart', unlock);
         }, {once: true});
     </script>
 </body>
