@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iPhone Simulator с Папкой</title>
+<style>
+body{
+  margin:0;
+  background:#111;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  font-family:sans-serif;
+}
+.iphone{
+  width:360px;
+  height:720px;
+  background:black;
+  border-radius:50px;
+  padding:20px;
+  box-shadow:0 0 60px rgba(0,0,0,0.8);
+}
+.screen{
+  width:100%;
+  height:100%;
+  background:linear-gradient(to bottom,#1c1c1c,#2e2e2e);
+  border-radius:40px;
+  position:relative;
+  overflow:hidden;
+}
+/* Dock */
+.dock{
+  position:absolute;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:25px;
+  background:rgba(255,255,255,0.1);
+  padding:10px 20px;
+  border-radius:30px;
+  justify-content:center;
+}
+.dock .icon{
+  width:60px;
+  height:60px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:0.2s;
+}
+.dock .icon img{
+  width:40px;
+  height:40px;
+  object-fit:contain;
+  margin-bottom:5px;
+}
+.dock .icon:active{transform:scale(0.9);}
+.icon-label{font-size:10px;color:white;text-align:center;}
+/* Папка */
+.folder{
+  position:absolute;
+  top:40%;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:10px;
+}
+.folder .icon{
+  width:60px;
+  height:60px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+.folder .icon img{
+  width:40px;
+  height:40px;
+  object-fit:contain;
+  margin-bottom:5px;
+}
+/* Приложение */
+.app{
+  position:absolute;
+  inset:0;
+  background:white;
+  border-radius:40px;
+  transform:translateY(100%);
+  transition:transform 0.35s cubic-bezier(.25,1,.5,1);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  font-size:18px;
+  touch-action:none;
+  padding:20px;
+  text-align:center;
+  overflow-y:auto;
+}
+.home-bar{
+  position:absolute;
+  bottom:12px;
+  left:50%;
+  transform:translateX(-50%);
+  width:120px;
+  height:5px;
+  background:#aaa;
+  border-radius:10px;
+}
+/* Пасхалка Телефон */
+#easterEgg{
+  display:none;
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:0;
+  opacity:0;
+  transition:opacity 0.5s;
+}
+/* Настройки на весь экран */
+#settingsLinks{
+  display:none;
+  position:absolute;
+  inset:0;
+  background:white;
+  padding:20px;
+  overflow-y:auto;
+  text-align:center;
+}
+#settingsLinks p{font-size:20px;margin-bottom:20px;}
+#settingsLinks a{
+  display:block;
+  margin:10px 0;
+  font-size:18px;
+  color:#007aff;
+  text-decoration:none;
+}
+#settingsLinks a:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+
+<div class="iphone">
+  <div class="screen">
+
+    <!-- Папка по центру -->
+    <div class="folder">
+      <div class="icon" data-app="Настройки">
+        <img src="assets/settings.png" alt="Настройки">
+        <div class="icon-label">Настройки</div>
+      </div>
+      <div class="icon" data-app="YouTube">
+        <img src="assets/youtube.png" alt="YouTube">
+        <div class="icon-label">YouTube</div>
+      </div>
+      <div class="icon" data-app="Telegram">
+        <img src="assets/telegram.png" alt="Telegram">
+        <div class="icon-label">Telegram</div>
+      </div>
+      <div class="icon" data-app="ChatGPT">
+        <img src="assets/chatgpt.png" alt="ChatGPT">
+        <div class="icon-label">ChatGPT</div>
+      </div>
+    </div>
+
+    <!-- Dock -->
+    <div class="dock">
+      <div class="icon" data-app="Телефон">
+        <img src="assets/phone.png" alt="Телефон">
+        <div class="icon-label">Телефон</div>
+      </div>
+      <div class="icon" data-app="Контакты">
+        <img src="assets/contacts.png" alt="Контакты">
+        <div class="icon-label">Контакты</div>
+      </div>
+      <div class="icon" data-app="Сообщения">
+        <img src="assets/messages.png" alt="Сообщения">
+        <div class="icon-label">Сообщения</div>
+      </div>
+    </div>
+
+    <!-- Приложение -->
+    <div class="app" id="app">
+      <div id="title"></div>
+      <div class="home-bar" id="homeBar"></div>
+      <img id="easterEgg" src="assets/easter_egg.png">
+      <div id="settingsLinks">
+        <p>Ссылки на мои GitHub-проекты:</p>
+        <a href="https://memtag14.github.io" target="_blank">memtag14.github.io</a>
+        <a href="https://github.com/zxckostyatt-web" target="_blank">zxckostyatt-web</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const icons = document.querySelectorAll(".folder .icon, .dock .icon");
+const app = document.getElementById("app");
+const title = document.getElementById("title");
+const easter = document.getElementById("easterEgg");
+const settingsLinks = document.getElementById("settingsLinks");
+
+let startY=0, currentY=0, dragging=false;
+
+/* Открытие приложений */
+icons.forEach(icon=>{
+  icon.addEventListener("click",()=>{
+    const appName = icon.dataset.app;
+    title.textContent = appName;
+    app.style.transition="transform 0.35s cubic-bezier(.25,1,.5,1)";
+    app.style.transform="translateY(0)";
+
+    // Пасхалка только для Телефон
+    if(appName === "Телефон"){
+      easter.style.display="block";
+      setTimeout(()=>{ easter.style.opacity = 1; },50);
+    } else {
+      easter.style.opacity = 0;
+      setTimeout(()=>{ easter.style.display = "none"; },500);
+    }
+
+    // Настройки на весь экран
+    if(appName === "Настройки"){
+      settingsLinks.style.display="block";
+    } else {
+      settingsLinks.style.display="none";
+    }
+  });
+});
+
+/* Свайп вверх для закрытия */
+function start(e){
+  if(app.style.transform !== "translateY(0px)" && app.style.transform !== "translateY(0)") return;
+  dragging=true;
+  startY = e.touches ? e.touches[0].clientY : e.clientY;
+  app.style.transition="none";
+}
+function move(e){
+  if(!dragging) return;
+  currentY = e.touches ? e.touches[0].clientY : e.clientY;
+  let diff = startY - currentY;
+  if(diff>0) app.style.transform=`translateY(${-diff}px)`;
+}
+function end(){
+  if(!dragging) return;
+  dragging=false;
+  let diff = startY - currentY;
+  app.style.transition="transform 0.35s cubic-bezier(.25,1,.5,1)";
+  if(diff>120){
+    app.style.transform="translateY(-100%)";
+    easter.style.opacity=0;
+    setTimeout(()=>{ easter.style.display="none"; },350);
+    settingsLinks.style.display="none";
+    setTimeout(()=>{ app.style.transform="translateY(100%)"; },350);
+  } else {
+    app.style.transform="translateY(0)";
+  }
+}
+app.addEventListener("mousedown",start);
+app.addEventListener("mousemove",move);
+app.addEventListener("mouseup",end);
+app.addEventListener("mouseleave",end);
+app.addEventListener("touchstart",start);
+app.addEventListener("touchmove",move);
+app.addEventListener("touchend",end);
+</script>
+
+</body>
+</html>
