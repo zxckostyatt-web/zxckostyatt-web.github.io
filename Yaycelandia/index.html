@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Яйцеландия</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(180deg, #fff8dc, #ffe4a3);
+      color: #3b2f1e;
+      text-align: center;
+    }
+
+    header {
+      padding: 50px 20px;
+      background: #ffd86b;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    h1 {
+      font-size: 52px;
+      margin: 0;
+    }
+
+    .hero-layout {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      padding: 40px 20px;
+      flex-wrap: wrap;
+    }
+
+    .flag {
+      width: 260px;
+      border-radius: 24px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+    }
+
+    .royal-quote {
+      background: rgba(255,255,255,0.95);
+      padding: 20px;
+      border-radius: 24px;
+      max-width: 420px;
+      font-size: 24px;
+      font-weight: bold;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+      border: 3px solid #f2c94c;
+    }
+      50% { transform: translateY(-12px); }
+    }
+
+    .content {
+      max-width: 850px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.9);
+      margin: 20px;
+      padding: 25px;
+      border-radius: 25px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    button {
+      background: #ffb300;
+      border: none;
+      padding: 14px 28px;
+      font-size: 18px;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      background: #ff9800;
+    }
+
+    #fact {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>👑 Яйцеландия</h1>
+    <p>Королевство, где из маленькой идеи выросла целая страна</p>
+  </header>
+
+  <div class="hero-layout">
+    <img class="flag" src="flag.webp" alt="Флаг Яйцеландии">
+    <div class="royal-quote">
+      👑 «Ребята, у вас яйца в Яйцеландии —
+      целую деревню уже построили!»
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="card">
+      <h2>Новая жизнь Яйцеландии</h2>
+      <p>
+        В Яйцеландии жители уже построили первый уютный дом и теперь каждый день
+        ходят друг к другу в гости пить тёплый чай и обсуждать будущее страны.
+        Рядом появились первые поля, где начали выращивать пшеницу для хлеба.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>Первая деревня</h2>
+      <p>
+        Возле холма уже появился магазин, несколько маленьких домов и целая деревня.
+        Пока название для неё ещё не выбрали, поэтому местные просто называют её
+        «Первая деревня Яйцеландии».
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>Праздник страны</h2>
+      <p>
+        Сегодня, <strong>19.04.2026</strong>, жители отмечают День рождения Яйцеландии —
+        день основания страны. На площади зажигают фонари, готовят хлеб из новой
+        пшеницы и поздравляют друг друга до позднего вечера.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>Интересный факт</h2>
+      <button onclick="showFact()">Показать факт</button>
+      <div id="fact"></div>
+    </div>
+  </div>
+
+  <script>
+    const facts = [
+      'Первый дом Яйцеландии построили всего за три дня.',
+      'Пшеница стала первым растением, которое вырастили жители страны.',
+      'В магазине Яйцеландии можно купить хлеб и сладкий яичный пирог.',
+      '19.04.2026 считается официальным днём рождения Яйцеландии.'
+    ];
+
+    function showFact() {
+      const randomFact = facts[Math.floor(Math.random() * facts.length)];
+      document.getElementById('fact').textContent = randomFact;
+    }
+  </script>
+</body>
+</html>
